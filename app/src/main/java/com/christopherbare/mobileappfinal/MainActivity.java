@@ -7,9 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,4 +37,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
+    private ArrayList<Object> getSampleArrayList() {
+        ArrayList<Object> items = new ArrayList<>();
+        items.add("image");
+        return items;
+    }
+
+
+
 }
