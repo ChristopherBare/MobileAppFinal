@@ -31,7 +31,10 @@ public class TripAdapter extends ArrayAdapter<Trip> {
 //        textViewPhone.setText(person.getPhone());
 //        imageView.setImageResource(person.picID);
 
+
+
         return convertView;
     }
 
 }
+
