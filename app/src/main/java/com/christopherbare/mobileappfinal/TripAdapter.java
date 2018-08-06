@@ -86,7 +86,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             holder.placesRecyclerView.setHasFixedSize(true);
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
             holder.placesRecyclerView.setLayoutManager(mLayoutManager);
-            adapter = new PlaceAdapter(context, trip.getPlace());
+            adapter = new PlaceAdapter(context, trip.getPlaces());
             holder.placesRecyclerView.setAdapter(adapter);
         } else {
             holder.placesRecyclerView.setVisibility(View.GONE);

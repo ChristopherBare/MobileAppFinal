@@ -62,4 +62,5 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     public interface SendData {
         void selectCity(String string);
     }
+
 }
