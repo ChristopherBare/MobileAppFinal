@@ -68,6 +68,7 @@ public class AddTripActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Trip trip = new Trip();
                 //TODO add trip to database
+                Log.i("demo", "onClick: tripManeEDNSNDFLKNL" + tripNameET.getText().toString());
                 trip.setTripName(tripNameET.getText().toString());
                 trip.setPlace(city);
 
@@ -142,7 +143,6 @@ public class AddTripActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
             adapter.notifyDataSetChanged();
         }
     }
