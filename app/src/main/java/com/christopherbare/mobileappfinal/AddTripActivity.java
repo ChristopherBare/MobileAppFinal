@@ -87,7 +87,7 @@ public class AddTripActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(cityET != null && !cityET.getText().toString().isEmpty() && cityET.getText().toString() != ""){
+                if(cityET != null && !cityET.getText().toString().isEmpty() && cityET.getText().toString() != "" && isConnected()){
                     new GetCitiesAsync().execute();
                 } else {
                     Toast.makeText(AddTripActivity.this, "Enter in a value", Toast.LENGTH_SHORT).show();
@@ -156,7 +156,7 @@ public class AddTripActivity extends AppCompatActivity {
                     cities.add(city);
                 }
 
-
+                Toast.makeText(AddTripActivity.this, cities.get(0), Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {
 
             }
