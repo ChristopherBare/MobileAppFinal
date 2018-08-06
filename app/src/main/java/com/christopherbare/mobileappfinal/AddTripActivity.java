@@ -71,6 +71,7 @@ public class AddTripActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Trip trip = new Trip();
                 //TODO add trip to database
+                Log.i("demo", "onClick: tripManeEDNSNDFLKNL" + tripNameET.getText().toString());
                 trip.setTripName(tripNameET.getText().toString());
                 trip.setPlace(city);
 
