@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class PlaceAdapter extends RecyclerView.Adapter {
+public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {
     Activity context;
     ArrayList<Place> places;
 
@@ -30,7 +30,7 @@ public class PlaceAdapter extends RecyclerView.Adapter {
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.place_item, parent, false);
 
@@ -39,18 +39,15 @@ public class PlaceAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         final Place place = places.get(position);
-        holder.textViewPlace.setText(place.getPlace());
+        holder.textViewPlace.setText(place.getCity());
     }
+
 
     @Override
     public int getItemCount() {
         return places.size();
-    }
-
-
-    public PlaceAdapter(Activity context, String place) {
     }
 
 
