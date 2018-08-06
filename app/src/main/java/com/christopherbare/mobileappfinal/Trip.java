@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 class Trip implements Parcelable {
-String tripName, place;
+String tripName, place, key;
 ArrayList<Place> places = new ArrayList<>();
 
     protected Trip(Parcel in) {
@@ -66,5 +66,13 @@ ArrayList<Place> places = new ArrayList<>();
 
     public static Creator<Trip> getCREATOR() {
         return CREATOR;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

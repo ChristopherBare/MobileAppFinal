@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -25,7 +26,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     PlaceAdapter adapter;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView deleteButton, placeButton;
+        ImageView mapButton, placeButton;
         TextView tripName, city;
         RecyclerView placesRecyclerView;
 
@@ -33,13 +34,13 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             super(itemView);
             tripName = itemView.findViewById(R.id.tripTextView);
             city = itemView.findViewById(R.id.cityTextView);
-            deleteButton = itemView.findViewById(R.id.deleteImageView);
-            placeButton = itemView.findViewById(R.id.placeTextView);
+            mapButton = itemView.findViewById(R.id.mapImageView);
+            placeButton = itemView.findViewById(R.id.addImageView);
             placesRecyclerView = itemView.findViewById(R.id.recyclerView);
         }
 
         public void bind(final Trip item, final SendData data) {
-            deleteButton.setOnClickListener(new View.OnClickListener() {
+            mapButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     data.deleteMessage(item);
@@ -60,7 +61,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     public TripAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                         int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.place_item, parent, false);
+                .inflate(R.layout.trip_item, parent, false);
 
         ViewHolder vh = new ViewHolder(view);
         return vh;
@@ -74,15 +75,28 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Trip trip = trips.get(position);
+        if (holder.city != null && holder.tripName != null && holder.placeButton != null && holder.mapButton != null) {
+            holder.city.setText(trip.getPlace());
+            holder.tripName.setText(trip.getTripName());
 
-        holder.placeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                data.addComment(trip);
-            }
-        });
+            holder.placeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //TODO do stuff for the place button
+                    Toast.makeText(context, "addPlace", Toast.LENGTH_SHORT).show();
+                }
+            });
 
-        if(trip.getPlaces().size() > 0){
+            holder.mapButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //TODO Stuff for maps
+                    Toast.makeText(context, "map", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        /*if(trip.getPlaces().size() > 0){
             holder.placesRecyclerView.setHasFixedSize(true);
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
             holder.placesRecyclerView.setLayoutManager(mLayoutManager);
@@ -91,12 +105,12 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         } else {
             holder.placesRecyclerView.setVisibility(View.GONE);
         }
-
+*/
     }
 
     public interface SendData {
         void deleteMessage(Trip trip);
-        void addComment(Trip trip);
+        //void addComment(Trip trip);
     }
 
     public class ListItem {

@@ -50,13 +50,16 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         final String city = cities.get(position);
         holder.textViewCity.setText(city);
+        final ViewHolder finalHolder = holder;
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 data.selectCity(city);
+                finalHolder.itemView.setBackgroundColor(finalHolder.itemView.getResources().getColor(R.color.colorAccent));
             }
         });
+
     }
 
     public interface SendData {

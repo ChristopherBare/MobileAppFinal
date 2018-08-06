@@ -2,6 +2,6 @@
     <string name="app_name">MobileAppFinal</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_maps">Map</string>
-    <string name="places_API_key">AIzaSyCxYVpa76mwcpndgaBlogGwLhn9nl77xsM</string>
+    <string name="places_API_key">AIzaSyDibjKMrJAEjxFgTDhZUnGcu9mNYcwkXNQ</string>
 
 </resources>

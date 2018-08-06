@@ -107,7 +107,9 @@ public class AddTripActivity extends AppCompatActivity {
 
             {
                 String strUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?key=" +
-                        R.string.places_API_key +
+
+                        "AIzaSyDibjKMrJAEjxFgTDhZUnGcu9mNYcwkXNQ"
+                        +
                         "&types=(cities)" +
                         "&input="
                         +cityET.getText().toString();

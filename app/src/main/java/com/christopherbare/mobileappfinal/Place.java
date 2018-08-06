@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 public class Place implements Parcelable {
     String name, city, key, parent;
+    float lat, lng;
 
     public String getName() {
         return name;
@@ -76,6 +77,22 @@ public class Place implements Parcelable {
         dest.writeString(city);
         dest.writeString(key);
         dest.writeString(parent);
+    }
+
+    public float getLat() {
+        return lat;
+    }
+
+    public void setLat(float lat) {
+        this.lat = lat;
+    }
+
+    public float getLng() {
+        return lng;
+    }
+
+    public void setLng(float lng) {
+        this.lng = lng;
     }
 }
 
