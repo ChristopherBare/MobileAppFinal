@@ -9,8 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.common.util.IOUtils;
 
@@ -61,7 +63,7 @@ public class AddTripActivity extends AppCompatActivity {
 
             {
                 String strUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?key=" +
-                        getString(R.string.places_API_key) +
+                        R.string.places_API_key +
                         "&types=(cities)" +
                         "&input="
                         +cityET.getText().toString();
@@ -96,27 +98,10 @@ public class AddTripActivity extends AppCompatActivity {
             return result;
         }
 
-        public GetKeywordAsync(){
+        public GetCitiesAsync(){
         }
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
 
-            if (s != null) {
-                String[] array = s.split(";");
-                for (int i = 0; i < array.length; i++) {
-                    keywords.add(array[i]);
-                }
-
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, keywords);
-                spinner.setAdapter(adapter);
-                goButton.setClickable(true);
-            } else {
-                Toast.makeText(context, "Error retrieving spinner items", Toast.LENGTH_SHORT).show();
-            }
-
-        }
     }
 
     private boolean isConnected() {

@@ -3,27 +3,50 @@ package com.christopherbare.mobileappfinal;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class PlaceAdapter extends RecyclerView.Adapter {
+    Activity context;
+    ArrayList<Place> places;
 
-    public PlaceAdapter() {
+    public static class ViewHolder extends RecyclerView.ViewHolder{
+        TextView textViewPlace;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            textViewPlace = itemView.findViewById(R.id.placeTextView);
+        }
+    }
+
+    public PlaceAdapter(Activity context, ArrayList<Place> places) {
+        this.context = context;
+        this.places = places;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.place_item, parent, false);
+
+        ViewHolder vh = new ViewHolder(view);
+        return vh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
+        final Place place = places.get(position);
+        holder.textViewPlace.setText(place.getPlace());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return places.size();
     }
 
 
