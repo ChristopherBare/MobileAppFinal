@@ -2,6 +2,7 @@ package com.christopherbare.mobileappfinal;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -15,6 +16,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.apache.commons.io.IOUtils;
 
@@ -32,6 +36,8 @@ public class AddTripActivity extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     ArrayList<String> cities;
     static String city;
+    static Trip trip;
+    DatabaseReference dbReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +48,7 @@ public class AddTripActivity extends AppCompatActivity {
         cityET = findViewById(R.id.cityEditText);
         addButton = findViewById(R.id.addTripButton);
         searchButton = findViewById(R.id.searchButton);
+        dbReference = FirebaseDatabase.getInstance().getReference();
         citiesList = findViewById(R.id.citiesList);
         cities = new ArrayList<>();
         citiesList.setHasFixedSize(true);
@@ -54,11 +61,23 @@ public class AddTripActivity extends AppCompatActivity {
             }
         });
 
+        citiesList.setAdapter(adapter);
+
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //add to the database
+
+                //TODO add trip to database
+                trip.setTripName(tripNameET.getText().toString());
+                trip.setPlace(city);
+
+                dbReference.child("trips")
+                        .push()
+                        .setValue(trip);
+
+                Intent intent = new Intent(AddTripActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
 
