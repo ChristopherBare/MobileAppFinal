@@ -86,6 +86,8 @@ public class AddTripActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(cityET != null && !cityET.getText().toString().isEmpty() && cityET.getText().toString() != ""){
                     new GetCitiesAsync().execute();
+                } else {
+                    Toast.makeText(AddTripActivity.this, "Enter in a value", Toast.LENGTH_SHORT).show();
                 }
             }
         });
