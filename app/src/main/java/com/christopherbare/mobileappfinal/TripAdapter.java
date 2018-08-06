@@ -1,14 +1,11 @@
 package com.christopherbare.mobileappfinal;
 
 import android.app.Activity;
-import android.app.Notification;
-import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,7 +14,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     SendData data;
@@ -29,23 +25,20 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     PlaceAdapter adapter;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView deleteButton, commentButton;
-        TextView messageView, user, date;
-        ImageView image;
-        RecyclerView commentRecyclerView;
+        ImageView deleteButton, placeButton;
+        TextView tripName, city;
+        RecyclerView placesRecyclerView;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            messageView = itemView.findViewById(R.id.textMessage);
-            user = itemView.findViewById(R.id.user);
-            date = itemView.findViewById(R.id.time);
-            image = itemView.findViewById(R.id.picture);
-            deleteButton = itemView.findViewById(R.id.delete);
-            commentButton = itemView.findViewById(R.id.comment);
-            commentRecyclerView = itemView.findViewById(R.id.recyclerViewComments);
+            tripName = itemView.findViewById(R.id.tripTextView);
+            city = itemView.findViewById(R.id.cityTextView);
+            deleteButton = itemView.findViewById(R.id.deleteImageView);
+            placeButton = itemView.findViewById(R.id.placeTextView);
+            placesRecyclerView = itemView.findViewById(R.id.recyclerView);
         }
 
-        public void bind(final Notification.MessagingStyle.Message item, final SendData data) {
+        public void bind(final Trip item, final SendData data) {
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -53,7 +46,6 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
                 }
             });
         }
-
     }
 
     public TripAdapter (Activity context, ArrayList<Trip> messages, SendData data) {
@@ -68,7 +60,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     public TripAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                         int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.message_row, parent, false);
+                .inflate(R.layout.place_item, parent, false);
 
         ViewHolder vh = new ViewHolder(view);
         return vh;
@@ -76,64 +68,40 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return messages.size();
+        return trips.size();
     }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Trip trip = trips.get(position);
-        holder.user.setText(message.getUser());
-        holder.date.setText(new PrettyTime().format(message.getTime()));
 
-        if(message.isPicture()){
-            holder.image.setVisibility(View.VISIBLE);
-            holder.messageView.setVisibility(View.GONE);
-            Picasso.get().load(message.imageURL).into(holder.image);
-        } else {
-            holder.messageView.setVisibility(View.VISIBLE);
-            holder.image.setVisibility(View.GONE);
-            holder.messageView.setText(message.getMessage());
-        }
-
-        if(message.getUser().equals(mAuth.getCurrentUser().getDisplayName())){
-            holder.deleteButton.setVisibility(View.VISIBLE);
-            holder.deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    data.deleteMessage(message);
-                }
-            });
-        } else {
-            holder.deleteButton.setVisibility(View.GONE);
-        }
-
-        holder.commentButton.setOnClickListener(new View.OnClickListener() {
+        holder.placeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                data.addComment(message);
+                data.addComment(trip);
             }
         });
 
-        if(message.getComments().size() > 0){
-            holder.commentRecyclerView.setHasFixedSize(true);
+        if(trip.getPlaces().size() > 0){
+            holder.placesRecyclerView.setHasFixedSize(true);
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
-            holder.commentRecyclerView.setLayoutManager(mLayoutManager);
-            adapter = new CommentAdapter(context, message.getComments());
-            holder.commentRecyclerView.setAdapter(adapter);
+            holder.placesRecyclerView.setLayoutManager(mLayoutManager);
+            adapter = new PlaceAdapter(context, trip.getPlace());
+            holder.placesRecyclerView.setAdapter(adapter);
         } else {
-            holder.commentRecyclerView.setVisibility(View.GONE);
+            holder.placesRecyclerView.setVisibility(View.GONE);
         }
 
     }
 
-
     public interface SendData {
-        void deleteMessage(Message message);
-        void addComment(Message message);
+        void deleteMessage(Trip trip);
+        void addComment(Trip trip);
     }
 
     public class ListItem {
-        Message message;
-        Comment comment;
+        Trip trip;
+        Place place;
     }
 
 
