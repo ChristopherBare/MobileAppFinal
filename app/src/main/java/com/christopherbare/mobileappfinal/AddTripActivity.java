@@ -36,7 +36,6 @@ public class AddTripActivity extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     ArrayList<String> cities;
     static String city;
-    static Trip trip;
     DatabaseReference dbReference;
 
     @Override
@@ -67,7 +66,7 @@ public class AddTripActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Trip trip = new Trip();
                 //TODO add trip to database
                 trip.setTripName(tripNameET.getText().toString());
                 trip.setPlace(city);
