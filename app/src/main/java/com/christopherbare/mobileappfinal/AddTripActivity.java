@@ -7,6 +7,8 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -14,16 +16,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.common.util.IOUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class AddTripActivity extends AppCompatActivity {
     EditText tripNameET, cityET;
     Button addButton, searchButton;
+    RecyclerView citiesList;
+    CityAdapter adapter;
+    RecyclerView.LayoutManager layoutManager;
+    ArrayList<String> cities;
+    static String city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +42,18 @@ public class AddTripActivity extends AppCompatActivity {
         cityET = findViewById(R.id.cityEditText);
         addButton = findViewById(R.id.addTripButton);
         searchButton = findViewById(R.id.searchButton);
+        citiesList = findViewById(R.id.citiesList);
+        cities = new ArrayList<>();
+        citiesList.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        citiesList.setLayoutManager(layoutManager);
+        adapter = new CityAdapter(this, cities, new CityAdapter.SendData() {
+            @Override
+            public void selectCity(String string) {
+                city = string;
+            }
+        });
+
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,10 +65,11 @@ public class AddTripActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //search via the api for cities
+                if(cityET != null && !cityET.getText().toString().isEmpty() && cityET.getText().toString() != ""){
+                    new GetCitiesAsync().execute();
+                }
             }
         });
-
 
 
     }
@@ -98,10 +119,12 @@ public class AddTripActivity extends AppCompatActivity {
             return result;
         }
 
-        public GetCitiesAsync(){
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            adapter.notifyDataSetChanged();
         }
-
-
     }
 
     private boolean isConnected() {
