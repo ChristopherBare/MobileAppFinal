@@ -13,7 +13,8 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     Activity context;
     ArrayList<String> cities;
     SendData data;
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewCity;
 
         public ViewHolder(View itemView) {
@@ -24,7 +25,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
     }
 
-    public CityAdapter(Activity context, ArrayList<String> cities, SendData data){
+    public CityAdapter(Activity context, ArrayList<String> cities, SendData data) {
         this.context = context;
         this.cities = cities;
         this.data = data;
@@ -32,7 +33,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
     @Override
     public CityAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                        int viewType) {
+                                                     int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.city_row_item, parent, false);
 
@@ -61,3 +62,4 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     public interface SendData {
         void selectCity(String string);
     }
+}
