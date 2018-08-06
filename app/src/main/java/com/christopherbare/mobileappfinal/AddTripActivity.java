@@ -37,7 +37,7 @@ public class AddTripActivity extends AppCompatActivity {
     RecyclerView citiesList;
     CityAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
-    ArrayList<String> cities;
+    static ArrayList<String> cities = new ArrayList<>();
     static String city;
     DatabaseReference dbReference;
 
@@ -52,7 +52,6 @@ public class AddTripActivity extends AppCompatActivity {
         searchButton = findViewById(R.id.searchButton);
         dbReference = FirebaseDatabase.getInstance().getReference();
         citiesList = findViewById(R.id.citiesList);
-        cities = new ArrayList<>();
         citiesList.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         citiesList.setLayoutManager(layoutManager);
@@ -146,6 +145,7 @@ public class AddTripActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            Toast.makeText(AddTripActivity.this, s, Toast.LENGTH_SHORT).show();
             try{
                 JSONObject object = new JSONObject(s);
                 JSONArray predictions = object.getJSONArray("predictions");
@@ -156,7 +156,7 @@ public class AddTripActivity extends AppCompatActivity {
                     cities.add(city);
                 }
 
-                Toast.makeText(AddTripActivity.this, cities.get(0), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(AddTripActivity.this, cities.get(0), Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {
 
             }
