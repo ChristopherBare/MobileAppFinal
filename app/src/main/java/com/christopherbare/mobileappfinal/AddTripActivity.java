@@ -21,6 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -142,7 +145,20 @@ public class AddTripActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            try{
+                JSONObject object = new JSONObject(s);
+                JSONArray predictions = object.getJSONArray("predictions");
 
+                for(int i = 0; i < predictions.length(); i++){
+                    JSONArray terms = predictions.getJSONObject(i).getJSONArray("terms");
+                    String city = terms.getJSONObject(0).get("value") + ", " + terms.getJSONObject(1).get("value");
+                    cities.add(city);
+                }
+
+
+            } catch (JSONException e) {
+
+            }
             adapter.notifyDataSetChanged();
         }
     }
