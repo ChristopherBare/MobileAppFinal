@@ -46,9 +46,6 @@ public class AddPlaceActivity extends AppCompatActivity {
         }
 
 
-
-
-
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -63,34 +60,40 @@ public class AddPlaceActivity extends AppCompatActivity {
             HttpURLConnection connection = null;
             String result = null;
             try {
-                String strUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=" +
-                        "AIzaSyDibjKMrJAEjxFgTDhZUnGcu9mNYcwkXNQ"
-                        + "&location=" +
-                        latitude + "," + longitude
+                String strUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key="
+                        + "AIzaSyDibjKMrJAEjxFgTDhZUnGcu9mNYcwkXNQ"
+                        + "&location="
+                        + latitude + "," + longitude
                         + "&radius=1000";
                 URL url = new URL(strUrl);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
                 if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     result = IOUtils.toString(connection.getInputStream(), "UTF8");
+                    JSONObject object = new JSONObject(result);
+                    JSONArray results = object.getJSONArray("results");
+
+                    for(int i = 0; i < results.length(); i++){
+                        JSONArray terms = results.getJSONObject(i).getJSONArray("terms");
+                        String place = terms.getJSONObject(0).get("value") + ", " + terms.getJSONObject(1).get("value");
+                        //places.add(place);
+                        //TODO Parse this correctly
+                    }
                     Log.i("Tag", "internet");
                 } else {
                     Log.i("Tag", "no internet" + connection.getResponseCode());
-
                 }
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
                 Log.i("Tag", "errror");
-            } catch (IOException e)
-
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
                 Log.i("Tag", "errror");
             } //Handle the exceptions
-            finally
-
-            {
+            catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
                 //Close open connections and reader
                 if (connection != null) {
                     connection.disconnect();
@@ -103,18 +106,6 @@ public class AddPlaceActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Toast.makeText(AddPlaceActivity.this, s, Toast.LENGTH_SHORT).show();
-            //TODO Fix this to get the places nearby using the lat and lng that was gotten from the other async class
-            try{
-                JSONObject object = new JSONObject(s);
-                JSONArray predictions = object.getJSONArray("predictions");
-
-                for(int i = 0; i < predictions.length(); i++){
-                    JSONArray terms = predictions.getJSONObject(i).getJSONArray("terms");
-                    String place = terms.getJSONObject(0).get("value") + ", " + terms.getJSONObject(1).get("value");
-                    //places.add(place);
-                }
-            } catch (JSONException e) {
-            }
             adapter.notifyDataSetChanged();
         }
     }
@@ -126,32 +117,38 @@ public class AddPlaceActivity extends AppCompatActivity {
             HttpURLConnection connection = null;
             String result = null;
             try {
-                String strUrl = "https://maps.googleapis.com/maps/api/place/details/json?key=" +
-                        "AIzaSyDibjKMrJAEjxFgTDhZUnGcu9mNYcwkXNQ"
+                String strUrl = "https://maps.googleapis.com/maps/api/place/details/json?key="
+                        + "AIzaSyDibjKMrJAEjxFgTDhZUnGcu9mNYcwkXNQ"
                         + placeID;
                 URL url = new URL(strUrl);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
                 if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     result = IOUtils.toString(connection.getInputStream(), "UTF8");
+                    JSONObject object = new JSONObject(result);
+                    JSONArray results = object.getJSONArray("results");
+
+                    for(int i = 0; i < results.length(); i++){
+                        JSONArray geometry = results.getJSONObject(i).getJSONArray("geometry");
+                        String lat = geometry.getJSONObject(i).getString("lat");
+                        String lng = geometry.getJSONObject(i).getString("lng");
+                        //TODO Figure out how to do this.
+                    }
                     Log.i("Tag", "internet");
                 } else {
                     Log.i("Tag", "no internet" + connection.getResponseCode());
-
                 }
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
                 Log.i("Tag", "errror");
-            } catch (IOException e)
-
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
                 Log.i("Tag", "errror");
             } //Handle the exceptions
-            finally
-
-            {
+            catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
                 //Close open connections and reader
                 if (connection != null) {
                     connection.disconnect();
@@ -164,18 +161,6 @@ public class AddPlaceActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Toast.makeText(AddPlaceActivity.this, s, Toast.LENGTH_SHORT).show();
-           //TODO fix this stuff to get the lat and lng and set those variables
-            try{
-                JSONObject object = new JSONObject(s);
-                JSONArray predictions = object.getJSONArray("predictions");
-
-                for(int i = 0; i < predictions.length(); i++){
-                    JSONArray terms = predictions.getJSONObject(i).getJSONArray("terms");
-                    String place = terms.getJSONObject(0).get("value") + ", " + terms.getJSONObject(1).get("value");
-                    //places.add(place);
-                }
-            } catch (JSONException e) {
-            }
             adapter.notifyDataSetChanged();
         }
     }
