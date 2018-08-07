@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,8 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         adapter = new TripAdapter(MainActivity.this, trips, new TripAdapter.SendData() {
+
             @Override
-            public void deleteMessage(Trip trip) {
+            public void deleteTrip(Trip trip) {
                 try {
                     if (database.child("trips").child(trip.key).getKey() != null) {
                         database.child("trips")
@@ -76,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
+
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

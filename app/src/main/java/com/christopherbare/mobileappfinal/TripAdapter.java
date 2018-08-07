@@ -1,6 +1,7 @@
 package com.christopherbare.mobileappfinal;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -43,15 +44,15 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             mapButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    data.deleteMessage(item);
+                    data.deleteTrip(item);
                 }
             });
         }
     }
 
-    public TripAdapter (Activity context, ArrayList<Trip> messages, SendData data) {
+    public TripAdapter (Activity context, ArrayList<Trip> trips, SendData data) {
         this.context = context;
-        this.trips = messages;
+        this.trips = trips;
         this.data = data;
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -84,6 +85,8 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
                 public void onClick(View view) {
                     //TODO do stuff for the place button
                     Toast.makeText(context, "addPlace", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(view.getContext(), AddPlaceActivity.class);
+                    context.startActivity(intent);
                 }
             });
 
@@ -92,6 +95,8 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
                 public void onClick(View view) {
                     //TODO Stuff for maps
                     Toast.makeText(context, "map", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(view.getContext(), MapsActivity.class);
+                    context.startActivity(intent);
                 }
             });
         }
@@ -109,8 +114,10 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
     }
 
     public interface SendData {
-        void deleteMessage(Trip trip);
-        //void addComment(Trip trip);
+        void deleteTrip(Trip trip);
+
+
+
     }
 
     public class ListItem {
