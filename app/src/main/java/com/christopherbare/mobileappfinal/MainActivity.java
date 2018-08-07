@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
               }
           });
 
-
         adapter = new TripAdapter(MainActivity.this, trips, new TripAdapter.SendData() {
 
             @Override
@@ -79,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
-
-
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

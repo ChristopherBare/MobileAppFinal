@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Place implements Parcelable {
-    String name, city, key, parent;
+    String name, city, key, parent, placeID;
     float lat, lng;
 
     public String getName() {
@@ -93,6 +93,14 @@ public class Place implements Parcelable {
 
     public void setLng(float lng) {
         this.lng = lng;
+    }
+
+    public String getPlaceID() {
+        return placeID;
+    }
+
+    public void setPlaceID(String placeID) {
+        this.placeID = placeID;
     }
 }
 

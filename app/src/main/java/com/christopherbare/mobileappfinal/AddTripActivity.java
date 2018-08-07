@@ -40,6 +40,8 @@ public class AddTripActivity extends AppCompatActivity {
     static ArrayList<String> cities = new ArrayList<>();
     static String city;
     DatabaseReference dbReference;
+    static ArrayList<String> place_ids = new ArrayList<>();
+    static String placeID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +57,11 @@ public class AddTripActivity extends AppCompatActivity {
         citiesList.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         citiesList.setLayoutManager(layoutManager);
-        adapter = new CityAdapter(this, cities, new CityAdapter.SendData() {
+        adapter = new CityAdapter(this, cities, place_ids, new CityAdapter.SendData() {
             @Override
-            public void selectCity(String string) {
-                city = string;
+            public void selectCity(String citySelect, String place) {
+                city = citySelect;
+                placeID = place;
             }
         });
 
@@ -73,6 +76,7 @@ public class AddTripActivity extends AppCompatActivity {
                 Log.i("demo", "onClick: tripManeEDNSNDFLKNL" + tripNameET.getText().toString());
                 trip.setTripName(tripNameET.getText().toString());
                 trip.setPlace(city);
+                trip.setPlaceID(placeID);
 
                 dbReference.child("trips")
                         .push()
@@ -107,7 +111,6 @@ public class AddTripActivity extends AppCompatActivity {
 
             {
                 String strUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?key=" +
-
                         "AIzaSyDibjKMrJAEjxFgTDhZUnGcu9mNYcwkXNQ"
                         +
                         "&types=(cities)" +
@@ -118,6 +121,16 @@ public class AddTripActivity extends AppCompatActivity {
                 connection.connect();
                 if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     result = IOUtils.toString(connection.getInputStream(), "UTF8");
+                    JSONObject object = new JSONObject(result);
+                    JSONArray predictions = object.getJSONArray("predictions");
+
+                    for(int i = 0; i < predictions.length(); i++){
+                        JSONArray terms = predictions.getJSONObject(i).getJSONArray("terms");
+                        String city = terms.getJSONObject(0).get("value") + ", " + terms.getJSONObject(1).get("value");
+                        String pID = predictions.getJSONObject(i).getString("place_id");
+                        cities.add(city);
+                        place_ids.add(pID);
+                    }
                     Log.i("Tag", "internet");
                 } else {
                     Log.i("Tag", "no internet" + connection.getResponseCode());
@@ -133,7 +146,9 @@ public class AddTripActivity extends AppCompatActivity {
                 e.printStackTrace();
                 Log.i("Tag", "errror");
             } //Handle the exceptions
-            finally
+            catch (JSONException e) {
+                e.printStackTrace();
+            } finally
 
             {
                 //Close open connections and reader
@@ -148,20 +163,6 @@ public class AddTripActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Toast.makeText(AddTripActivity.this, s, Toast.LENGTH_SHORT).show();
-            try{
-                JSONObject object = new JSONObject(s);
-                JSONArray predictions = object.getJSONArray("predictions");
-
-                for(int i = 0; i < predictions.length(); i++){
-                    JSONArray terms = predictions.getJSONObject(i).getJSONArray("terms");
-                    String city = terms.getJSONObject(0).get("value") + ", " + terms.getJSONObject(1).get("value");
-                    cities.add(city);
-                }
-
-                //Toast.makeText(AddTripActivity.this, cities.get(0), Toast.LENGTH_SHORT).show();
-            } catch (JSONException e) {
-
-            }
             adapter.notifyDataSetChanged();
         }
     }

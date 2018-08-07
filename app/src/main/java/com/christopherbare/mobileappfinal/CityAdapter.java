@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
+     ArrayList<String> placeIDs;
     Activity context;
     ArrayList<String> cities;
     SendData data;
@@ -25,9 +26,10 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
     }
 
-    public CityAdapter(Activity context, ArrayList<String> cities, SendData data) {
+    public CityAdapter(Activity context, ArrayList<String> cities, ArrayList<String> place_ids, SendData data) {
         this.context = context;
         this.cities = cities;
+        this.placeIDs = place_ids;
         this.data = data;
     }
 
@@ -49,13 +51,14 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final String city = cities.get(position);
+        final String placeID = placeIDs.get(position);
         holder.textViewCity.setText(city);
         final ViewHolder finalHolder = holder;
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                data.selectCity(city);
+                data.selectCity(city, placeID);
                 finalHolder.itemView.setBackgroundColor(finalHolder.itemView.getResources().getColor(R.color.colorAccent));
             }
         });
@@ -63,7 +66,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     }
 
     public interface SendData {
-        void selectCity(String string);
+        void selectCity(String city, String placeID);
     }
 
 }

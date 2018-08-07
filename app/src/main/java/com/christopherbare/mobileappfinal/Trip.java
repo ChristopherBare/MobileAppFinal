@@ -6,12 +6,31 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 class Trip implements Parcelable {
-String tripName, place, key;
+String tripName, key, place, placeID;
+Place placeObj;
 ArrayList<Place> places = new ArrayList<>();
+
+    public String getPlaceID() {
+        return placeID;
+    }
+
+    public void setPlaceID(String placeID) {
+        this.placeID = placeID;
+    }
+
+    public Place getPlaceObj() {
+        return placeObj;
+    }
+
+    public void setPlaceObj(Place placeObj) {
+        this.placeObj = placeObj;
+    }
 
     protected Trip(Parcel in) {
         tripName = in.readString();
-        place = in.readString();
+        key = in.readString();
+        place = in.readParcelable(Place.class.getClassLoader());
+        places = in.createTypedArrayList(Place.CREATOR);
     }
 
     public static final Creator<Trip> CREATOR = new Creator<Trip>() {
@@ -53,7 +72,7 @@ ArrayList<Place> places = new ArrayList<>();
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(tripName);
-        parcel.writeString(place);
+        parcel.writeString(String.valueOf(place));
     }
 
     public ArrayList<Place> getPlaces() {
