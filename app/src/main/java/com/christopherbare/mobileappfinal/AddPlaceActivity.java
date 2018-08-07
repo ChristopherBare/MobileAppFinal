@@ -32,6 +32,7 @@ public class AddPlaceActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager mLayoutManager;
     String placeID;
+    String latitude, longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +66,9 @@ public class AddPlaceActivity extends AppCompatActivity {
 
             {
                 String strUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=" +
-
                         "AIzaSyDibjKMrJAEjxFgTDhZUnGcu9mNYcwkXNQ"
                         + "&location=" +
-                        "latitude" +
-                        "," +
-                        "longitude"
+                        latitude + "," + longitude
                         + "&radius=1000";
                 URL url = new URL(strUrl);
                 connection = (HttpURLConnection) url.openConnection();
