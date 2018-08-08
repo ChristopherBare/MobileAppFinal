@@ -36,12 +36,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        fab = findViewById(R.id.fab);
+        recyclerView = findViewById(R.id.recyclerView);
 
-        if(getIntent() != null && getIntent().getExtras() != null) {
-
-        } else {
+       
             adapter = new TripAdapter(MainActivity.this, trips, new TripAdapter.SendData() {
 
                 @Override
@@ -62,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
             mLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setAdapter(adapter);
-        }
             database.child("trips").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
