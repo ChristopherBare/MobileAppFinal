@@ -15,6 +15,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {
     Activity context;
@@ -59,8 +61,11 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         holder.addPlaceImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                trip.getPlaces().add(place);
 
-
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put("/trips/" + trip.key, trip);
+                database.updateChildren(childUpdates);
 
                 Intent intent = new Intent(v.getContext(), MainActivity.class);
                 intent.putExtra("place", place);
