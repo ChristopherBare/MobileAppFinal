@@ -152,7 +152,8 @@ public class AddPlaceActivity extends AppCompatActivity {
                     JSONObject location = geometry.getJSONObject("location");
                     latitude = location.getString("lat");
                     longitude = location.getString("lng");
-
+                    trip.setLat(latitude);
+                    trip.setLng(longitude);
 
 
                     Log.i("Tag", "internet");

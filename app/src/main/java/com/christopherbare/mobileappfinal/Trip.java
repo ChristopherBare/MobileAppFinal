@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 class Trip implements Parcelable {
-String tripName, key, place, placeID;
+String tripName, key, place, placeID, lat, lng;
 Place placeObj;
 ArrayList<Place> places = new ArrayList<>();
 
@@ -17,6 +17,22 @@ ArrayList<Place> places = new ArrayList<>();
         placeID = in.readString();
         placeObj = in.readParcelable(Place.class.getClassLoader());
         places = in.createTypedArrayList(Place.CREATOR);
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getLng() {
+        return lng;
+    }
+
+    public void setLng(String lng) {
+        this.lng = lng;
     }
 
     @Override
