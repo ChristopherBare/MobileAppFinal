@@ -10,6 +10,42 @@ String tripName, key, place, placeID;
 Place placeObj;
 ArrayList<Place> places = new ArrayList<>();
 
+    protected Trip(Parcel in) {
+        tripName = in.readString();
+        key = in.readString();
+        place = in.readString();
+        placeID = in.readString();
+        placeObj = in.readParcelable(Place.class.getClassLoader());
+        places = in.createTypedArrayList(Place.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(tripName);
+        dest.writeString(key);
+        dest.writeString(place);
+        dest.writeString(placeID);
+        dest.writeParcelable(placeObj, flags);
+        dest.writeTypedList(places);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Trip> CREATOR = new Creator<Trip>() {
+        @Override
+        public Trip createFromParcel(Parcel in) {
+            return new Trip(in);
+        }
+
+        @Override
+        public Trip[] newArray(int size) {
+            return new Trip[size];
+        }
+    };
+
     public String getPlaceID() {
         return placeID;
     }
@@ -26,24 +62,7 @@ ArrayList<Place> places = new ArrayList<>();
         this.placeObj = placeObj;
     }
 
-    protected Trip(Parcel in) {
-        tripName = in.readString();
-        key = in.readString();
-        place = in.readParcelable(Place.class.getClassLoader());
-        places = in.createTypedArrayList(Place.CREATOR);
-    }
 
-    public static final Creator<Trip> CREATOR = new Creator<Trip>() {
-        @Override
-        public Trip createFromParcel(Parcel in) {
-            return new Trip(in);
-        }
-
-        @Override
-        public Trip[] newArray(int size) {
-            return new Trip[size];
-        }
-    };
 
     public String getTripName() {
         return tripName;
@@ -64,16 +83,7 @@ ArrayList<Place> places = new ArrayList<>();
     public Trip() {
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(tripName);
-        parcel.writeString(String.valueOf(place));
-    }
 
     public ArrayList<Place> getPlaces() {
         return places;
