@@ -37,14 +37,16 @@ public class AddPlaceActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        new GetPlacesAsync().execute();
+        if(isConnected())
+            new GetPlacesAsync().execute();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place);
-        new GetLocationAsync().execute();
+        if(isConnected())
+            new GetLocationAsync().execute();
 
         recyclerView = findViewById(R.id.placeRecyclerView);
 
