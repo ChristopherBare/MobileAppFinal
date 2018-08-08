@@ -59,7 +59,7 @@ public class AddPlaceActivity extends AppCompatActivity {
             trip = getIntent().getParcelableExtra("trip");
         }
 
-        adapter = new PlaceAdapter(this, places);
+        adapter = new PlaceAdapter(this, places, trip);
 
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
