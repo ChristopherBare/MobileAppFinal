@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {
     Activity context;
     ArrayList<Place> places;
+    DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+    Trip trip;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView textViewPlace;
@@ -31,9 +35,10 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         }
     }
 
-    public PlaceAdapter(Activity context, ArrayList<Place> places) {
+    public PlaceAdapter(Activity context, ArrayList<Place> places, Trip trip) {
         this.context = context;
         this.places = places;
+        this.trip = trip;
     }
 
     @NonNull
@@ -54,6 +59,9 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         holder.addPlaceImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+
                 Intent intent = new Intent(v.getContext(), MainActivity.class);
                 intent.putExtra("place", place);
                 context.startActivity(intent);

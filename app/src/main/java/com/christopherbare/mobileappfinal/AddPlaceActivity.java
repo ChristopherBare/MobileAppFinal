@@ -33,6 +33,9 @@ public class AddPlaceActivity extends AppCompatActivity {
     RecyclerView.LayoutManager mLayoutManager;
     String placeID;
     String latitude, longitude;
+    Trip trip;
+
+
 
     @Override
     protected void onStart() {
@@ -45,6 +48,7 @@ public class AddPlaceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place);
+
         if(isConnected())
             new GetLocationAsync().execute();
 
@@ -52,6 +56,7 @@ public class AddPlaceActivity extends AppCompatActivity {
 
         if(getIntent() != null && getIntent().getExtras() != null) {
             placeID = getIntent().getStringExtra("place_id");
+            trip = getIntent().getParcelableExtra("trip");
         }
 
         adapter = new PlaceAdapter(this, places);

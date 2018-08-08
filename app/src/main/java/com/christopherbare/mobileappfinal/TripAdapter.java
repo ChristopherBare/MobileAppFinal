@@ -85,7 +85,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
                 public void onClick(View view) {
                     Toast.makeText(context, "addPlace", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(view.getContext(), AddPlaceActivity.class);
-                    intent.putExtra("place_id", trip.placeID);
+                    intent.putExtra("trip", trip);
                     context.startActivity(intent);
                 }
             });
