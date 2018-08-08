@@ -39,53 +39,59 @@ public class MainActivity extends AppCompatActivity {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-        database.child("trips").addValueEventListener(new ValueEventListener() {
-              @Override
-              public void onDataChange(DataSnapshot dataSnapshot) {
-                  trips.clear();
-                  for (DataSnapshot node : dataSnapshot.getChildren()) {
+        if(getIntent() != null && getIntent().getExtras() != null) {
 
-                      Trip trip = node.getValue(Trip.class);
-                      trip.key = node.getKey();
-                      trips.add(trip);
-                  }
-                  adapter.notifyDataSetChanged();
-              }
+        } else {
+            adapter = new TripAdapter(MainActivity.this, trips, new TripAdapter.SendData() {
 
-              @Override
-              public void onCancelled(@NonNull DatabaseError databaseError) {
-
-              }
-          });
-
-        adapter = new TripAdapter(MainActivity.this, trips, new TripAdapter.SendData() {
-
-            @Override
-            public void deleteTrip(Trip trip) {
-                try {
-                    if (database.child("trips").child(trip.key).getKey() != null) {
-                        database.child("trips")
-                                .child(trip.key)
-                                .removeValue();
+                @Override
+                public void deleteTrip(Trip trip) {
+                    try {
+                        if (database.child("trips").child(trip.key).getKey() != null) {
+                            database.child("trips")
+                                    .child(trip.key)
+                                    .removeValue();
+                        }
+                    } catch (Exception e) {
+                        Log.e("demo", "deleteMessage: Exception", e);
                     }
-                } catch (Exception e) {
-                    Log.e("demo", "deleteMessage: Exception", e);
                 }
-            }
-        });
+            });
 
-        recyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setAdapter(adapter);
+            recyclerView.setHasFixedSize(true);
+            mLayoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setAdapter(adapter);
+        }
+            database.child("trips").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    trips.clear();
+                    for (DataSnapshot node : dataSnapshot.getChildren()) {
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddTripActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+                        Trip trip = node.getValue(Trip.class);
+                        trip.key = node.getKey();
+                        trips.add(trip);
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, AddTripActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
     }
-}
+

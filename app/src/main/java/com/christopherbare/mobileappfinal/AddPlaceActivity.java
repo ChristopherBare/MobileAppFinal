@@ -35,9 +35,16 @@ public class AddPlaceActivity extends AppCompatActivity {
     String latitude, longitude;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        new GetPlacesAsync().execute();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place);
+        new GetLocationAsync().execute();
 
         recyclerView = findViewById(R.id.placeRecyclerView);
 
@@ -45,6 +52,7 @@ public class AddPlaceActivity extends AppCompatActivity {
             placeID = getIntent().getStringExtra("place_id");
         }
 
+        adapter = new PlaceAdapter(this, places);
 
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -74,10 +82,16 @@ public class AddPlaceActivity extends AppCompatActivity {
                     JSONArray results = object.getJSONArray("results");
 
                     for(int i = 0; i < results.length(); i++){
-                        JSONArray terms = results.getJSONObject(i).getJSONArray("terms");
-                        String place = terms.getJSONObject(0).get("value") + ", " + terms.getJSONObject(1).get("value");
-                        //places.add(place);
-                        //TODO Parse this correctly
+                        Place place = new Place();
+                        JSONObject term = results.getJSONObject(i);
+                        JSONObject location = term.getJSONObject("geometry").getJSONObject("location");
+                        place.setLat(location.getString("lat"));
+                        place.setLng(location.getString("lng"));
+                        place.setName(term.getString("name"));
+                        place.setIcon(term.getString("icon"));
+                        //change if needed
+                        place.setPlaceID(term.getString("place_id"));
+                        places.add(place);
                     }
                     Log.i("Tag", "internet");
                 } else {
@@ -118,7 +132,7 @@ public class AddPlaceActivity extends AppCompatActivity {
             String result = null;
             try {
                 String strUrl = "https://maps.googleapis.com/maps/api/place/details/json?key="
-                        + "AIzaSyDibjKMrJAEjxFgTDhZUnGcu9mNYcwkXNQ"
+                        + "AIzaSyDibjKMrJAEjxFgTDhZUnGcu9mNYcwkXNQ&place_id="
                         + placeID;
                 URL url = new URL(strUrl);
                 connection = (HttpURLConnection) url.openConnection();
@@ -126,14 +140,14 @@ public class AddPlaceActivity extends AppCompatActivity {
                 if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     result = IOUtils.toString(connection.getInputStream(), "UTF8");
                     JSONObject object = new JSONObject(result);
-                    JSONArray results = object.getJSONArray("results");
+                    JSONObject results = object.getJSONObject("result");
+                    JSONObject geometry = results.getJSONObject("geometry");
+                    JSONObject location = geometry.getJSONObject("location");
+                    latitude = location.getString("lat");
+                    longitude = location.getString("lng");
 
-                    for(int i = 0; i < results.length(); i++){
-                        JSONArray geometry = results.getJSONObject(i).getJSONArray("geometry");
-                        String lat = geometry.getJSONObject(i).getString("lat");
-                        String lng = geometry.getJSONObject(i).getString("lng");
-                        //TODO Figure out how to do this.
-                    }
+
+
                     Log.i("Tag", "internet");
                 } else {
                     Log.i("Tag", "no internet" + connection.getResponseCode());
