@@ -100,7 +100,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
             });
         }
 
-        /*if(trip.getPlaces().size() > 0){
+        if(trip.getPlaces().size() > 0){
             holder.placesRecyclerView.setHasFixedSize(true);
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
             holder.placesRecyclerView.setLayoutManager(mLayoutManager);
@@ -109,7 +109,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.ViewHolder> {
         } else {
             holder.placesRecyclerView.setVisibility(View.GONE);
         }
-*/
+
     }
 
     public interface SendData {
